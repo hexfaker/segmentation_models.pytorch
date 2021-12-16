@@ -1,6 +1,9 @@
+from typing import Optional
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch import Tensor
 
 from ..base import modules as md
 
@@ -32,8 +35,8 @@ class DecoderBlock(nn.Module):
         )
         self.attention2 = md.Attention(attention_type, in_channels=out_channels)
 
-    def forward(self, x, skip=None):
-        x = F.interpolate(x, scale_factor=2, mode="nearest")
+    def forward(self, x, skip: Optional[Tensor] =None):
+        x = F.interpolate(x, scale_factor=2.0, mode="nearest")
         if skip is not None:
             x = torch.cat([x, skip], dim=1)
             x = self.attention1(x)
